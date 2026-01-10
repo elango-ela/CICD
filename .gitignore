@@ -1,0 +1,14 @@
+# Ignore Python junk
+__pycache__/
+*.pyc
+.venv/
+
+# Ignore real data & models
+data/
+models/
+metrics/
+
+# Allow only DVC pointers
+!data/**/*.dvc
+!models/**/*.dvc
+!metrics/**/*.dvc

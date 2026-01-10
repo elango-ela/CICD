@@ -1,0 +1,76 @@
+schema: '2.0'
+stages:
+  ingest:
+    cmd: python3 src/data_ingestion.py
+    deps:
+    - path: data/raw/breast_cancer_v1.csv
+      hash: md5
+      md5: 4632902188bdb6373c536a90eb82f635
+      size: 62796
+    outs:
+    - path: data/raw/data.csv
+      hash: md5
+      md5: 4632902188bdb6373c536a90eb82f635
+      size: 62796
+  preprocess:
+    cmd: python3 src/preprocess.py
+    deps:
+    - path: data/raw/data.csv
+      hash: md5
+      md5: 4632902188bdb6373c536a90eb82f635
+      size: 62796
+    - path: src/preprocess.py
+      hash: md5
+      md5: 529523ef1717e89ad6d9936721bde964
+      size: 590
+    outs:
+    - path: data/processed/
+      hash: md5
+      md5: 2ac484d7d5d9fbd06707ac9a0a3a87ce.dir
+      size: 61147
+      nfiles: 4
+  train:
+    cmd: python3 src/train.py
+    deps:
+    - path: data/processed/
+      hash: md5
+      md5: 2ac484d7d5d9fbd06707ac9a0a3a87ce.dir
+      size: 61147
+      nfiles: 4
+    - path: params.yaml
+      hash: md5
+      md5: ffef8bfc364ad2c034276446de90715e
+      size: 78
+    - path: src/train.py
+      hash: md5
+      md5: ae46f6d9545d0b60a43e00f9bbbde324
+      size: 565
+    outs:
+    - path: models/model.pkl
+      hash: md5
+      md5: cd5b6ccf5d43a26f45525bf63db47c5e
+      size: 1103
+    - path: models/scaler.pkl
+      hash: md5
+      md5: f25ee287b4021851bd4193e63f50fd2f
+      size: 2071
+  evaluate:
+    cmd: python3 src/evaluate.py
+    deps:
+    - path: models/model.pkl
+      hash: md5
+      md5: cd5b6ccf5d43a26f45525bf63db47c5e
+      size: 1103
+    - path: models/scaler.pkl
+      hash: md5
+      md5: f25ee287b4021851bd4193e63f50fd2f
+      size: 2071
+    - path: src/evaluate.py
+      hash: md5
+      md5: e0e254d89dd95f93bad6222dddd0ee79
+      size: 503
+    outs:
+    - path: metrics/metrics.json
+      hash: md5
+      md5: a8fd579cc2885daaccd4a64e692c0430
+      size: 49
