@@ -1,9 +1,8 @@
-# Ignore Python junk
-__pycache__/
-*.pyc
 .venv/
+__pycache__/
 
 # Ignore real data & models
+data/
 models/
 metrics/
 
@@ -11,3 +10,6 @@ metrics/
 !data/**/*.dvc
 !models/**/*.dvc
 !metrics/**/*.dvc
+
+# Ignore secrets
+gdrive.json

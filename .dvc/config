@@ -1,3 +1,7 @@
 [core]
-    interactive = false
-    check_update = false
+    remote = storj
+['remote "storj"']
+    url = s3://cicd
+    endpointurl = https://gateway.storjshare.io
+    access_key_id = jwbzg5robhemnvpsk7af4t5gtwq
+    secret_access_key = jzi7fthheavyjr2nxdstl6tdwzndtd4ja3xxnxmvtvh4xspfr2h

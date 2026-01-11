@@ -5,7 +5,7 @@ COPY . .
 
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Pull data + models from DVC remote
+# 👇 THIS LINE IS CRITICAL
 RUN dvc pull
 
 CMD ["uvicorn", "app:app", "--host", "0.0.0.0", "--port", "8000"]
