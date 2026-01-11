@@ -9,10 +9,26 @@ jobs:
     runs-on: ubuntu-22.04
 
     steps:
-    - uses: actions/checkout@v3
+    - name: Checkout code
+      uses: actions/checkout@v3
+
+    - name: Verify models exist
+      run: |
+        echo "Checking if model files exist..."
+        ls -lah models/
+        test -f models/model.pkl && echo "✓ model.pkl found" || exit 1
+        test -f models/scaler.pkl && echo "✓ scaler.pkl found" || exit 1
 
     - name: Build Docker image
       run: docker build -t breast-cancer-mlops .
+
+    - name: Test Docker image (optional)
+      run: |
+        docker run -d -p 8000:8000 --name test-container breast-cancer-mlops
+        sleep 5
+        curl -f http://localhost:8000/ && echo "✓ API is responsive" || echo "⚠ API health check failed"
+        docker stop test-container
+        docker rm test-container
 
     - name: Deploy to Render
       run: |

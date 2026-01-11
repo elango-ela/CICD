@@ -3,7 +3,6 @@ __pycache__/
 
 # Ignore real data & models
 data/
-models/
 metrics/
 
 # Allow only DVC pointers

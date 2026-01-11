@@ -6,3 +6,4 @@ joblib
 dvc
 pyyaml
 dvc[s3]
+dvc-rclone
