@@ -12,7 +12,7 @@ async def lifespan(app: FastAPI):
     scaler = joblib.load("models/scaler.pkl")
     model = joblib.load("models/model.pkl")
     yield   # API runs here
-    # (optional cleanup when shutting down)
+    # (optional cleanups when shutting down)
 
 app = FastAPI(title="Breast Cancer Prediction API", lifespan=lifespan)
 
