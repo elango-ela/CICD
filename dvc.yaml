@@ -1,24 +1,34 @@
-name: MLOps CI/CD Pipeline
+stages:
+  ingest:
+    cmd: python3 src/data_ingestion.py
+    deps:
+      - data/raw/breast_cancer_v1.csv
+    outs:
+      - data/raw/data.csv
 
-on:
-  push:
-    branches: [ main ]
+  preprocess:
+    cmd: python3 src/preprocess.py
+    deps:
+      - src/preprocess.py
+      - data/raw/data.csv
+    outs:
+      - data/processed/
 
-jobs:
-  build-deploy:
-    runs-on: ubuntu-22.04
+  train:
+    cmd: python3 src/train.py
+    deps:
+      - src/train.py
+      - data/processed/
+      - params.yaml
+    outs:
+      - models/model.pkl
+      - models/scaler.pkl
 
-    steps:
-    - uses: actions/checkout@v3
-
-    - name: Build Docker image
-      run: |
-        docker build \
-          --build-arg STORJ_ACCESS_KEY=${{ secrets.STORJ_ACCESS_KEY }} \
-          --build-arg STORJ_SECRET_KEY=${{ secrets.STORJ_SECRET_KEY }} \
-          -t breast-cancer-mlops .
-
-    - name: Deploy to Render
-      run: |
-        curl -X POST https://api.render.com/v1/services/${{ secrets.RENDER_SERVICE_ID }}/deploys \
-          -H "Authorization: Bearer ${{ secrets.RENDER_API_KEY }}"
+  evaluate:
+    cmd: python3 src/evaluate.py
+    deps:
+      - src/evaluate.py
+      - models/model.pkl
+      - models/scaler.pkl
+    outs:
+      - metrics/metrics.json
