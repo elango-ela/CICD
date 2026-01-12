@@ -26,3 +26,41 @@
 #         curl -X POST https://api.render.com/v1/services/${{ secrets.RENDER_SERVICE_ID }}/deploys \
 #           -H "Authorization: Bearer ${{ secrets.RENDER_API_KEY }}"
 # -xx- end
+
+
+#
+#
+stages:
+  ingest:
+    cmd: python3 src/data_ingestion.py
+    deps:
+      - data/raw/breast_cancer_v1.csv
+    outs:
+      - data/raw/data.csv
+
+  preprocess:
+    cmd: python3 src/preprocess.py
+    deps:
+      - src/preprocess.py
+      - data/raw/data.csv
+    outs:
+      - data/processed/
+
+  train:
+    cmd: python3 src/train.py
+    deps:
+      - src/train.py
+      - data/processed/
+      - params.yaml
+    outs:
+      - models/model.pkl
+      - models/scaler.pkl
+
+  evaluate:
+    cmd: python3 src/evaluate.py
+    deps:
+      - src/evaluate.py
+      - models/model.pkl
+      - models/scaler.pkl
+    outs:
+      - metrics/metrics.json
