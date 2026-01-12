@@ -1,24 +1,28 @@
-name: MLOps CI/CD Pipeline
-
-on:
-  push:
-    branches: [ main ]
-
-jobs:
-  build-deploy:
-    runs-on: ubuntu-22.04
-
-    steps:
-    - uses: actions/checkout@v3
-
-    - name: Build Docker image
-      run: |
-        docker build \
-          --build-arg STORJ_ACCESS_KEY=${{ secrets.STORJ_ACCESS_KEY }} \
-          --build-arg STORJ_SECRET_KEY=${{ secrets.STORJ_SECRET_KEY }} \
-          -t breast-cancer-mlops .
-
-    - name: Deploy to Render
-      run: |
-        curl -X POST https://api.render.com/v1/services/${{ secrets.RENDER_SERVICE_ID }}/deploys \
-          -H "Authorization: Bearer ${{ secrets.RENDER_API_KEY }}"
+#
+## github ci -xx- start  
+##
+# name: MLOps CI/CD Pipeline
+#
+# on:
+#   push:
+#     branches: [ main ]
+#
+# jobs:
+#   build-deploy:
+#     runs-on: ubuntu-22.04
+#
+#     steps:
+#     - uses: actions/checkout@v3
+#
+#     - name: Build Docker image
+#       run: |
+#         docker build \
+#           --build-arg STORJ_ACCESS_KEY=${{ secrets.STORJ_ACCESS_KEY }} \
+#           --build-arg STORJ_SECRET_KEY=${{ secrets.STORJ_SECRET_KEY }} \
+#           -t breast-cancer-mlops .
+#
+#     - name: Deploy to Render
+#       run: |
+#         curl -X POST https://api.render.com/v1/services/${{ secrets.RENDER_SERVICE_ID }}/deploys \
+#           -H "Authorization: Bearer ${{ secrets.RENDER_API_KEY }}"
+# -xx- end

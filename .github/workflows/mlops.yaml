@@ -2,10 +2,17 @@ name: MLOps CI/CD Pipeline
 
 on:
   push:
-    branches: [ main ]
+    branches:
+      - main
+      - "*-patch"
+      - "patch-*"
+
+  pull_request:
+    branches:
+      - main
 
 jobs:
-  build-deploy:
+  build:
     runs-on: ubuntu-22.04
 
     steps:
@@ -22,6 +29,7 @@ jobs:
     - name: Build Docker image
       run: docker build -t breast-cancer-mlops .
 
+    # TODO: maybe separate stage
     - name: Test Docker image (optional)
       run: |
         docker run -d -p 8000:8000 --name test-container breast-cancer-mlops
@@ -30,6 +38,13 @@ jobs:
         docker stop test-container
         docker rm test-container
 
+  deploy:
+    # deployment plan; runs after build process
+    needs: build
+    runs-on: ubuntu-22.04
+
+    # TODO: it does nothing
+    steps:
     - name: Deploy to Render
       run: |
         curl -X POST https://api.render.com/v1/services/${{ secrets.RENDER_SERVICE_ID }}/deploys \
