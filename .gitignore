@@ -12,3 +12,5 @@ metrics/
 
 # Ignore secrets
 gdrive.json
+.envrc
+.direnv/
